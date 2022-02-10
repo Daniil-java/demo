@@ -1,7 +1,6 @@
 package ru.spring.demo;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -11,5 +10,11 @@ public class HelloWorldController {
     @GetMapping
     public List<String> getHelloWorld() {
         return List.of("Hello", "World");
+    }
+
+    @GetMapping("/api")
+    @ResponseBody
+    public String getId(@RequestParam String id) {
+        return "ID: " + id;
     }
 }
