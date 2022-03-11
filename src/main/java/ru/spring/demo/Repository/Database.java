@@ -6,12 +6,11 @@ import ru.spring.demo.Objects.Expense;
 import ru.spring.demo.Objects.Filter;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
 @Repository
-public class AuthService {
+public class Database {
 
     private static Connection connection;
     private static Statement statement;
@@ -88,11 +87,6 @@ public class AuthService {
 
         //Нельзя выбрать несколько категорий
         //Нельзя не выбирать категорию
-
-//        String sqlRequest = "SELECT id, name, money, category, date FROM expenses WHERE " +
-//                "(money BETWEEN " + filter.getMoneyFrom() + " AND " + filter.getMoneyTo() + " ) " +
-//                "AND (date BETWEEN '" + filter.getDateFrom() + "' AND '" + filter.getDateTo() + "') " +
-//                "AND category = '" + filter.getCategory() + "'";
 
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT id, name, money, category, date FROM expenses WHERE " +
@@ -173,16 +167,6 @@ public class AuthService {
             return null;
         }
     }
-
-//    public static int getExpenseId(Expense expense) {
-//        try {
-//            PreparedStatement ps = connection.prepareStatement("SELECT name, money, category, date FROM expenses WHERE id = ?");
-//            ps.setInt(1, id);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return -1;
-//        }
-//    }
 
     public static boolean editExpense(int id, Expense expense) {
         try {
@@ -274,32 +258,5 @@ public class AuthService {
             return null;
         }
     }
-
-//    private static void createTable() throws SQLException {
-//        statement.executeUpdate(
-//                "CREATE TABLE IF NOT EXISTS expenses(" +
-//                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-//                        "name VARCHAR(250)," +
-//                        "money DOUBLE," +
-//                        "type INTEGER," +
-//                        "date DATETIME NOT NULL," +
-//                        "FOREIGN KEY (type) REFERENCES categories(id)" +
-//                        ")"
-//
-//        );
-//        statement.executeUpdate("CREATE INDEX expenses_money_idx ON expenses(money)");
-//        statement.executeUpdate("CREATE INDEX expenses_date_idx ON expenses(date)");
-//        statement.executeUpdate("CREATE INDEX expenses_type_idx ON expenses(type)");
-//    }
-//
-//    private static void createTableCategories() throws SQLException {
-//        statement.executeUpdate(
-//                "CREATE TABLE IF NOT EXISTS categories(" +
-//                        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-//                        "name VARCHAR(250)" +
-//                        ")"
-//        );
-//        statement.executeUpdate("CREATE INDEX categories_name_idx ON categories(name);");
-//    }
 
 }

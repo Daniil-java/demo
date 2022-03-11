@@ -2,13 +2,13 @@ package ru.spring.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ru.spring.demo.Repository.AuthService;
+import ru.spring.demo.Repository.Database;
 
 @SpringBootApplication
 public class DemoApplication {
 
 	public static void main(String[] args) {
-		AuthService.connection();
+		Database.connection();
 		SpringApplication.run(DemoApplication.class, args);
 	}
 

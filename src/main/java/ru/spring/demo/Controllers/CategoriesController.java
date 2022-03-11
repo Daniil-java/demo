@@ -2,32 +2,32 @@ package ru.spring.demo.Controllers;
 
 import org.springframework.web.bind.annotation.*;
 import ru.spring.demo.Objects.Category;
-import ru.spring.demo.Repository.AuthService;
+import ru.spring.demo.Repository.Database;
 
 import java.util.List;
 
 @RestController
 public class CategoriesController  {
 
-    @GetMapping("/expense-accounting/categories")
+    @GetMapping("/expense-accounting/category")
     public List<Category> getCategories() {
-        AuthService.connection();
+        Database.connection();
         new Object();
-        return AuthService.getCategories();
+        return Database.getCategories();
     }
 
-    @PutMapping("/expense-accounting/categories")
+    @PutMapping("/expense-accounting/category")
     public Category setExpense(@RequestBody Category category) {
-        AuthService.connection();
-        AuthService.setNewCategory(category);
-        return AuthService.getCategory(AuthService.getCategoryId(category));
+        Database.connection();
+        Database.setNewCategory(category);
+        return Database.getCategory(Database.getCategoryId(category));
     }
 
-    @DeleteMapping("/expense-accounting/categories/{id}")
+    @DeleteMapping("/expense-accounting/category/{id}")
     public Category deleteExpense(@PathVariable int id) {
-        AuthService.connection();
-        Category category = AuthService.getCategory(id);
-        AuthService.deleteCategory(id);
+        Database.connection();
+        Category category = Database.getCategory(id);
+        Database.deleteCategory(id);
         return category;
     }
 }

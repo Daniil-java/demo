@@ -4,7 +4,7 @@ public class Filter {
     private String category = "";
     private double moneyFrom = 0d;
     private double moneyTo = Double.MAX_VALUE;
-    private String dateFrom = "2000-01-01";
+    private String dateFrom = "Wed Mar 09 00:00:00 MSK 2022";
     private String dateTo = new java.util.Date().toString();
 
     public Filter(String category, double moneyFrom, double moneyTo, String dateFrom, String dateTo) {
