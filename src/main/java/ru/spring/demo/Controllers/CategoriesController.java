@@ -1,5 +1,6 @@
 package ru.spring.demo.Controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.spring.demo.Objects.Category;
 import ru.spring.demo.Repository.Database;
@@ -9,11 +10,15 @@ import java.util.List;
 @RestController
 public class CategoriesController  {
 
+    @Autowired
+    Database db;
+
     @GetMapping("/expense-accounting/category")
     public List<Category> getCategories() {
-        Database.connection();
-        new Object();
-        return Database.getCategories();
+        return db.getCategoriesNonStatic();
+//        Database.connection();
+//        new Object();
+//        return Database.getCategories();
     }
 
     @PutMapping("/expense-accounting/category")
