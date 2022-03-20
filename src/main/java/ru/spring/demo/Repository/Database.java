@@ -1,10 +1,12 @@
 package ru.spring.demo.Repository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.spring.demo.Objects.Category;
 import ru.spring.demo.Objects.Expense;
 import ru.spring.demo.Objects.Filter;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
@@ -14,6 +16,9 @@ public class Database {
 
     private static Connection connection;
     private static Statement statement;
+
+    @Autowired
+    DataSource ds;
 
     public static void connection() {
         try {
@@ -203,6 +208,24 @@ public class Database {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public List<Category> getCategoriesNonStatic() {
+        List<Category> result = new ArrayList<>();
+
+        try (Connection conn = ds.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM categories")) {
+            try (ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    result.add(new Category(rs.getInt(1), rs.getString(2)));
+                }
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return result;
     }
 
     public static boolean setNewCategory(Category category) {
