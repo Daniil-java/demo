@@ -3,16 +3,16 @@ package ru.spring.demo.Objects;
 public class Expense {
     private int id;
     private String name;
-    private double money;
-    private String type;
-    private String date;
+    private double sum;
+    private int categoryId;
+    private String ts;
 
-    public Expense(int id, String name, double money, String expenseType, String date) {
+    public Expense(int id, String name, double sum, int categoryId, String date) {
         this.id = id;
         this.name = name;
-        this.money = money;
-        this.type = expenseType;
-        this.date = date;
+        this.sum = sum;
+        this.categoryId = categoryId;
+        this.ts = date;
     }
 
     public String getName() {
@@ -23,28 +23,28 @@ public class Expense {
         this.name = name;
     }
 
-    public double getMoney() {
-        return money;
+    public double getSum() {
+        return sum;
     }
 
-    public void setMoney(double money) {
-        this.money = money;
+    public void setSum(double sum) {
+        this.sum = sum;
     }
 
-    public String getType() {
-        return type;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public String getDate() {
-        return date;
+    public String getTs() {
+        return ts;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setTs(String ts) {
+        this.ts = ts;
     }
 
     public int getId() {
