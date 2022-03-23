@@ -3,34 +3,39 @@ package ru.spring.demo.Controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.spring.demo.Objects.Category;
-import ru.spring.demo.Repository.CategoriesRepository;
 import ru.spring.demo.Services.CategoriesService;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/category")
 public class CategoriesController  {
 
     @Autowired
     CategoriesService categoriesService;
 
-    @GetMapping("/expense-accounting/category")
+    @GetMapping
     public List<Category> getCategories() {
         return categoriesService.getCategories();
     }
 
-    @PutMapping("/expense-accounting/category")
-    public Category setExpense(@RequestBody Category category) {
-        return categoriesService.setExpense(category);
+    @GetMapping("/{id}")
+    public Category getCategory(@PathVariable int id) {
+        return categoriesService.getCategory(id);
     }
 
-    @DeleteMapping("/expense-accounting/category/{id}")
-    public Category deleteExpense(@PathVariable int id) {
-        return categoriesService.deleteExpense(id);
+    @PutMapping
+    public Category setCategory(@RequestBody Category category) {
+        return categoriesService.setCategory(category);
     }
 
-    @PostMapping("/expense-accounting/category/{id}")
-    public Category editExpense(@PathVariable int id, @RequestBody Category category) {
-        return categoriesService.editExpense(id, category);
+    @DeleteMapping("/{id}")
+    public Category deleteCategory(@PathVariable int id) {
+        return categoriesService.deleteCategory(id);
+    }
+
+    @PostMapping("/{id}")
+    public Category editCategory(@PathVariable int id, @RequestBody Category category) {
+        return categoriesService.editCategory(id, category);
     }
 }

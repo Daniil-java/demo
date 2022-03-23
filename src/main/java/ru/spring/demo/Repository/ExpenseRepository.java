@@ -2,6 +2,7 @@ package ru.spring.demo.Repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ru.spring.demo.Objects.Category;
 import ru.spring.demo.Objects.Expense;
 import ru.spring.demo.Objects.Filter;
 
@@ -115,20 +116,33 @@ public class ExpenseRepository {
         }
     }
 
-    public boolean setNewExpense(Expense expense) {
+    public Expense setNewExpense(Expense expense) {
+        Expense newExpense;
+        int id = 0;
         try (Connection connection = ds.getConnection();
-             PreparedStatement ps = connection.prepareStatement("INSERT INTO expenses (name, sum, categoryId, ts) VALUES (?, ?, ?, ?)");
         ) {
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO expenses (name, sum, categoryId, ts) VALUES (?, ?, ?, ?)"); //За скобками, чтобы можно было сделать следующий запрос в БД, иначе id=0
             java.util.Date date = new Date();
             ps.setString(1, expense.getName());
             ps.setDouble(2, expense.getSum());
             ps.setInt(3, expense.getCategoryId());
             ps.setString(4, date.toString());
             ps.execute();
-            return true;
+
+            ps = connection.prepareStatement("SELECT LAST_INSERT_ROWID()");
+
+            try (ResultSet rs = ps.executeQuery();){
+                while (rs.next()) {
+                    id = rs.getInt(1);
+                }
+            }
+
+            if (id == 0) return null;
+
+            return newExpense = new Expense(id, expense.getName(), expense.getSum(), expense.getCategoryId(), expense.getTs());
         }catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
@@ -147,7 +161,7 @@ public class ExpenseRepository {
 
     public Expense getExpense(int id) {
         try (Connection connection = ds.getConnection();
-             PreparedStatement ps = connection.prepareStatement("SELECT name, sum, categories.category, ts FROM expenses e JOIN categories c ON e.categoryId = c.id WHERE id = ?");
+             PreparedStatement ps = connection.prepareStatement("SELECT name, sum, c.category, ts FROM expenses e JOIN categories c ON e.categoryId = c.id WHERE e.id = ?");
         )  {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery();){
@@ -169,10 +183,27 @@ public class ExpenseRepository {
         }
     }
 
-    public boolean editExpense(int id, Expense expense) {
+    public int getLastInsertId() {
+        try(Connection connection = ds.getConnection();
+            PreparedStatement ps = connection.prepareStatement("SELECT LAST_INSERT_ROWID();")
+        ) {
+            try (ResultSet rs = ps.executeQuery();){
+                while (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+        return -1;
+    }
+
+    public Expense editExpense(int id, Expense expense) {
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(
-                     "UPDATE expenses SET" +
+                     "UPDATE expenses SET " +
                              "name = ?, sum = ?, categoryId = ?, ts = ?" +
                              "WHERE id = ?");
         )  {
@@ -182,10 +213,10 @@ public class ExpenseRepository {
             ps.setString(4, expense.getTs());
             ps.setInt(5, id);
             ps.execute();
-            return true;
+            return new Expense(id, expense.getName(), expense.getSum(), expense.getCategoryId(), expense.getTs());
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 }

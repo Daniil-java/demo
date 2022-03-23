@@ -38,9 +38,9 @@ public class ExpenseService {
         return expenseRepository.getExpense(id);
     }
 
-    public List<Expense> setExpense(Expense expense) {
-        expenseRepository.setNewExpense(expense);
-        return expenseRepository.getExpenses();
+    public Expense setExpense(Expense expense) {
+        return expenseRepository.setNewExpense(expense);
+//        return expenseRepository.getExpenses();
     }
 
     public Expense deleteExpense(int id) {

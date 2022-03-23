@@ -15,6 +15,13 @@ public class Expense {
         this.ts = date;
     }
 
+    public Expense(String name, double sum, int categoryId, String ts) {
+        this.name = name;
+        this.sum = sum;
+        this.categoryId = categoryId;
+        this.ts = ts;
+    }
+
     public String getName() {
         return name;
     }
@@ -50,4 +57,5 @@ public class Expense {
     public int getId() {
         return id;
     }
+
 }

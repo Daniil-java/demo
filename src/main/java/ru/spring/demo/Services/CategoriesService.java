@@ -2,7 +2,6 @@ package ru.spring.demo.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 import ru.spring.demo.Objects.Category;
 import ru.spring.demo.Repository.CategoriesRepository;
 
@@ -17,19 +16,22 @@ public class CategoriesService {
         return categoriesRepository.getCategories();
     }
 
-    public Category setExpense(Category category) {
-        categoriesRepository.setNewCategory(category);
-        return categoriesRepository.getCategory(categoriesRepository.getCategoryId(category));
+    public Category setCategory(Category category) {
+        return categoriesRepository.setNewCategory(category);
     }
 
-    public Category deleteExpense(int id) {
+    public Category deleteCategory(int id) {
         Category category = categoriesRepository.getCategory(id);
         categoriesRepository.deleteCategory(id);
         return category;
     }
 
-    public Category editExpense(int id, Category category) {
+    public Category editCategory(int id, Category category) {
         categoriesRepository.editCategory(id, category);
         return categoriesRepository.getCategory(id);
+    }
+
+    public Category getCategory(int id) {
+       return categoriesRepository.getCategory(id);
     }
 }

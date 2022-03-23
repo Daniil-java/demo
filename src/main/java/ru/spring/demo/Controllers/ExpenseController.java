@@ -11,6 +11,7 @@ import ru.spring.demo.Services.ExpenseService;
 import java.util.List;
 
 @RestController
+@RequestMapping("/expense")
 public class ExpenseController {
 
     @Autowired
@@ -31,12 +32,12 @@ public class ExpenseController {
 //        return Database.getExpenses();     //Случай, отсутсвия параметров или неверных параметров
 //    }
 
-    @GetMapping("/expense-accounting/expense/filter")
+    @GetMapping("/filter")
     public List<Expense> getFilterExpenses(@RequestBody Filter filter) {
         return expenseService.getFilterExpenses(filter);
     }
 
-    @GetMapping("/expense-accounting/expense")
+    @GetMapping
     public List<Expense> getFilterExpenses(@RequestParam(value = "category", required = false) String category,
                                            @RequestParam(value = "sumFrom", required = false) String sumFrom,
                                            @RequestParam(value = "sumTo", required = false) String sumTo,
@@ -47,22 +48,27 @@ public class ExpenseController {
         return expenseService.getFilterExpenses(category, sumFrom, sumTo, dateFrom, dateTo, order);
     }
 
-    @GetMapping("/expense-accounting/expense/{id}")
+    @GetMapping("/{id}")
     public Expense getExpense(@PathVariable int id) {
         return expenseService.getExpense(id);
     }
 
-    @PutMapping("/expense-accounting/expense")
-    public List<Expense> setExpense(@RequestBody Expense expense) {
+    @PutMapping
+    public Expense setExpense(@RequestBody Expense expense) {
         return expenseService.setExpense(expense);
     }
 
-    @DeleteMapping("/expense-accounting/expense/{id}")
+//    @PutMapping
+//    public List<Expense> setExpense(@RequestBody Expense expense) {
+//        return expenseService.setExpense(expense);
+//    }
+
+    @DeleteMapping("/{id}")
     public Expense deleteExpense(@PathVariable int id) {
         return expenseService.deleteExpense(id);
     }
 
-    @PostMapping("/expense-accounting/expense/{id}")
+    @PostMapping("/{id}")
     public Expense editExpense(@PathVariable int id, @RequestBody Expense expense) {
         return expenseService.editExpense(id, expense);
     }

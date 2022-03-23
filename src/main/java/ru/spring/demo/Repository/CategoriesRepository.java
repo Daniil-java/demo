@@ -34,16 +34,17 @@ public class CategoriesRepository {
         }
     }
 
-    public boolean setNewCategory(Category category) {
+    public Category setNewCategory(Category category) {
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement("INSERT INTO categories (category) VALUES (?)");
         )  {
             ps.setString(1, category.getCategory().toUpperCase());
             ps.execute();
-            return true;
+            Category newCategory = new Category(getCategoryId(category), category.getCategory());
+            return newCategory;
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            return null;
         }
     }
 
@@ -64,7 +65,7 @@ public class CategoriesRepository {
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement("SELECT id FROM categories WHERE category = ?");
              )  {
-            ps.setString(1, category.getCategory());
+            ps.setString(1, category.getCategory().toUpperCase());
 
             try (ResultSet rs = ps.executeQuery();){
                 while (rs.next()) {
@@ -98,11 +99,11 @@ public class CategoriesRepository {
     public boolean editCategory(int id, Category category) {
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(
-                     "UPDATE categories SET" +
+                     "UPDATE categories SET " +
                              "category = ?" +
                              "WHERE id = ?");
              )  {
-            ps.setString(1, category.getCategory());
+            ps.setString(1, category.getCategory().toUpperCase());
             ps.setInt(2, id);
             return true;
         } catch (SQLException e) {
