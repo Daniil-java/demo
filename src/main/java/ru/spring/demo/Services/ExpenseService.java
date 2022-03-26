@@ -1,6 +1,8 @@
 package ru.spring.demo.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,9 +10,11 @@ import ru.spring.demo.Objects.Expense;
 import ru.spring.demo.Objects.Filter;
 import ru.spring.demo.Repository.ExpenseRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@EnableScheduling
 public class ExpenseService {
     @Autowired
     ExpenseRepository expenseRepository;
@@ -52,5 +56,10 @@ public class ExpenseService {
     public Expense editExpense(int id, Expense expense) {
         expenseRepository.editExpense(id, expense);
         return expenseRepository.getExpense(id);
+    }
+
+    @Scheduled(cron = "${interval-in-cron}")
+    public void doTask() {
+        System.out.println(LocalDateTime.now());
     }
 }
