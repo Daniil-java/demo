@@ -48,6 +48,16 @@ public class ExpenseController {
         return expenseService.getFilterExpenses(category, sumFrom, sumTo, dateFrom, dateTo, order);
     }
 
+    @GetMapping("/f")
+    public List<Expense> getExpense(@RequestParam(value = "category", required = false) String category,
+                                    @RequestParam(value = "sumFrom", required = false) String sumFrom,
+                                    @RequestParam(value = "sumTo", required = false) String sumTo
+//                                    @RequestParam(value = "dateFrom", required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) String dateFrom,
+//                                    @RequestParam(value = "dateTo", required = false) @DateTimeFormat(iso=DateTimeFormat.ISO.DATE) String dateTo
+    ) {
+        return expenseService.getFilterExpenses(category, Double.parseDouble(sumFrom), Double.parseDouble(sumTo));
+    }
+
     @GetMapping("/{id}")
     public Expense getExpense(@PathVariable int id) {
         return expenseService.getExpense(id);

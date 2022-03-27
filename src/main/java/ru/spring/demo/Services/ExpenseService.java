@@ -1,17 +1,25 @@
 package ru.spring.demo.Services;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import netscape.javascript.JSObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.client.RestTemplate;
 import ru.spring.demo.Objects.Expense;
 import ru.spring.demo.Objects.Filter;
+import ru.spring.demo.Objects.Money;
 import ru.spring.demo.Repository.ExpenseRepository;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @EnableScheduling
@@ -21,6 +29,19 @@ public class ExpenseService {
 
     public List<Expense> getFilterExpenses(Filter filter) {
         return expenseRepository.getExpenses(filter);
+    }
+
+    public List<Expense> getFilterExpenses(String category, double sumFrom, double sumTo) {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+//        LocalDateTime dateTimeFrom = LocalDateTime.parse(dateFrom, formatter);
+//        LocalDateTime dateTimeTo = LocalDateTime.parse(dateFrom, formatter);
+
+        List<Expense> list = new ArrayList<>();
+        System.out.println(expenseRepository.getExpenses());
+        list = expenseRepository.getExpenses().stream().filter((expense) ->
+                expense.getSum() >= sumFrom && expense.getSum() <= sumTo).collect(Collectors.toList());
+
+        return list;
     }
 
     public List<Expense> getFilterExpenses(String category, String sumFrom, String sumTo, String dateFrom, String dateTo, String order) {
@@ -58,8 +79,4 @@ public class ExpenseService {
         return expenseRepository.getExpense(id);
     }
 
-    @Scheduled(cron = "${interval-in-cron}")
-    public void doTask() {
-        System.out.println(LocalDateTime.now());
-    }
 }

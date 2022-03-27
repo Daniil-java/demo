@@ -37,8 +37,9 @@ public class CategoriesServiceTest {
 
     @Test
     public void testDeleteCategory() {
-        categoriesService.setCategory(new Category("testDeleteCategory"));
+        Category category = categoriesService.setCategory(new Category("testDeleteCategory"));
         Assertions.assertTrue(categoriesRepository.deleteCategory(categoriesRepository.getCategoryId(new Category("testDeleteCategory"))));
+        categoriesService.deleteCategory(category.getId());
     }
 
     @Test
@@ -47,6 +48,6 @@ public class CategoriesServiceTest {
         categoriesService.editCategory(category.getId(), new Category("testEdit")); //Редактирование категории
         //Проверка того, что название категории изменилось на то, которое было передано в методе
         Assertions.assertTrue(category.getCategory().equalsIgnoreCase(categoriesService.getCategory(category.getId()).getCategory()));
-        categoriesService.deleteCategory(categoriesRepository.getCategoryId(new Category("testEdit"))); //Удаление тестовой категории
+        categoriesService.deleteCategory(category.getId()); //Удаление тестовой категории
     }
 }

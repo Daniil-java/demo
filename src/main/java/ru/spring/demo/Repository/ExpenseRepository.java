@@ -22,7 +22,7 @@ public class ExpenseRepository {
         List<Expense> expenses = new ArrayList<>();
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(
-                     "SELECT id, name, sum, categories.category, ts FROM expenses" +
+                     "SELECT expenses.id, name, sum, categories.category, ts FROM expenses " +
                              "LEFT JOIN categories ON expenses.categoryId = categories.id"
              );
              ) {
