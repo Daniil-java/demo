@@ -1,0 +1,82 @@
+package ru.spring.demo.Services;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import netscape.javascript.JSObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.client.RestTemplate;
+import ru.spring.demo.Objects.Expense;
+import ru.spring.demo.Objects.Filter;
+import ru.spring.demo.Objects.Money;
+import ru.spring.demo.Repository.ExpenseRepository;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@EnableScheduling
+public class ExpenseService {
+    @Autowired
+    ExpenseRepository expenseRepository;
+
+    public List<Expense> getFilterExpenses(Filter filter) {
+        return expenseRepository.getExpenses(filter);
+    }
+
+    public List<Expense> getFilterExpenses(String category, double sumFrom, double sumTo) {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+//        LocalDateTime dateTimeFrom = LocalDateTime.parse(dateFrom, formatter);
+//        LocalDateTime dateTimeTo = LocalDateTime.parse(dateFrom, formatter);
+
+        List<Expense> list = new ArrayList<>();
+        System.out.println(expenseRepository.getExpenses());
+        list = expenseRepository.getExpenses().stream().filter((expense) ->
+                expense.getSum() >= sumFrom && expense.getSum() <= sumTo).collect(Collectors.toList());
+
+        return list;
+    }
+
+    public List<Expense> getFilterExpenses(String category, String sumFrom, String sumTo, String dateFrom, String dateTo, String order) {
+        Double from = 0d;
+        Double to = Double.MAX_VALUE;
+
+        if (sumFrom != null) {
+            from = Double.valueOf(sumFrom);
+        }
+
+        if (sumTo != null) {
+            to = Double.valueOf(sumTo);
+        }
+
+        return expenseRepository.getExpenses(new Filter(category, from, to, dateFrom, dateTo, order));
+    }
+
+    public Expense getExpense(int id) {
+        return expenseRepository.getExpense(id);
+    }
+
+    public Expense setExpense(Expense expense) {
+        return expenseRepository.setNewExpense(expense);
+//        return expenseRepository.getExpenses();
+    }
+
+    public Expense deleteExpense(int id) {
+        Expense expense = expenseRepository.getExpense(id);
+        expenseRepository.deleteExpense(id);
+        return expense;
+    }
+
+    public Expense editExpense(int id, Expense expense) {
+        expenseRepository.editExpense(id, expense);
+        return expenseRepository.getExpense(id);
+    }
+
+}
